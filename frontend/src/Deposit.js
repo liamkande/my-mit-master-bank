@@ -6,20 +6,19 @@ import { getFirestore, collection, doc, updateDoc, getDoc } from 'firebase/fires
 const Deposit = () => {
     const [show, setShow] = useState(true);
     const [status, setStatus] = useState('');
-    const [currentBalance, setCurrentBalance] = useState(null);
-    const loggedInUser = auth.currentUser;
+    const [userData, setUserData] = useState(null);
 
     const fetchUserBalance = async () => {
         try {
             setStatus('Fetching balance...');
             const db = getFirestore();
             const usersCollection = collection(db, 'users');
-            const userDocRef = doc(usersCollection, loggedInUser.uid);
+            const userDocRef = doc(usersCollection, auth.currentUser.uid);
             const userDoc = await getDoc(userDocRef);
 
             if (userDoc.exists()) {
-                const userBalance = userDoc.data().balance;
-                setCurrentBalance(userBalance);
+                const userData = userDoc.data();
+                setUserData(userData);
                 setStatus('');
             }
         } catch (error) {
@@ -29,24 +28,23 @@ const Deposit = () => {
     };
 
     useEffect(() => {
-        if (loggedInUser) {
+        if (auth.currentUser) {
             fetchUserBalance()
                 .then(() => {
-                    console.log('balance fetched successful.')
+                    console.log('Balance fetched successfully.');
                 })
                 .catch((error) => {
-                    // An error occurred during sign-out.
                     console.error('Error fetching balance:', error);
                 });
         }
-    }, [loggedInUser]);
+    }, []);
 
     const handleDeposit = async (amount) => {
         try {
             setStatus('Depositing...');
             const db = getFirestore();
             const usersCollection = collection(db, 'users');
-            const userDocRef = doc(usersCollection, loggedInUser.uid);
+            const userDocRef = doc(usersCollection, auth.currentUser.uid);
 
             const userDoc = await getDoc(userDocRef);
             const userBalance = userDoc.data().balance || 0;
@@ -55,8 +53,8 @@ const Deposit = () => {
 
             await updateDoc(userDocRef, { balance: newBalance });
 
-            setCurrentBalance(newBalance);
-            setStatus(`${loggedInUser.displayName}, your new balance is ${newBalance} dollars.`);
+            setUserData({ ...userData, balance: newBalance });
+            setStatus(`${userData.displayName}, your new balance is ${newBalance} dollars.`);
             setShow(false);
         } catch (error) {
             setStatus('Deposit failed');
@@ -72,18 +70,18 @@ const Deposit = () => {
             <Card.Body>
                 {show ? (
                     <DepositForm
-                        user={loggedInUser}
-                        currentBalance={currentBalance}
-                        setCurrentBalance={setCurrentBalance}
+                        user={auth.currentUser}
                         handleDeposit={handleDeposit}
                         setStatus={setStatus}
                         setShow={setShow}
+                        userData={userData}
+                        setUserData={setUserData} // Pass setUserData as a prop
                     />
                 ) : (
                     <DepositMsg
                         setShow={setShow}
                         setStatus={setStatus}
-                        user={loggedInUser}
+                        userData={userData}
                         status={status}
                     />
                 )}
@@ -111,7 +109,7 @@ const DepositMsg = ({ setShow, setStatus, status }) => {
     );
 };
 
-const DepositForm = ({ user, currentBalance, handleDeposit, setStatus, setShow,setCurrentBalance  }) => {
+const DepositForm = ({ user, handleDeposit, setStatus, setShow, userData, setUserData }) => {
     const [amount, setAmount] = useState(0);
 
     const handle = async () => {
@@ -127,8 +125,8 @@ const DepositForm = ({ user, currentBalance, handleDeposit, setStatus, setShow,s
 
             if (response.ok) {
                 const data = await response.json();
-                setStatus(`${user.displayName}, your new balance is ${data.value.balance} dollars.`);
-                setCurrentBalance(data.value.balance); // Update the balance
+                setStatus(`${userData.displayName}, your new balance is ${data.value.balance} dollars.`);
+                setUserData({ ...userData, balance: data.value.balance });
             } else {
                 setStatus('Deposit failed');
             }
@@ -143,8 +141,8 @@ const DepositForm = ({ user, currentBalance, handleDeposit, setStatus, setShow,s
 
     return (
         <>
-            <Card.Title>Welcome Back: {user?.displayName}</Card.Title>
-            <Card.Text>Current Balance: ${currentBalance}</Card.Text>
+            <Card.Title>Welcome Back: {userData?.displayName}</Card.Title>
+            <Card.Text>Current Balance: ${userData?.balance}</Card.Text>
             <Card.Text>Amount</Card.Text>
             <input
                 type="number"
