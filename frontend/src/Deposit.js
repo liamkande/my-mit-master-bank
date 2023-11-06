@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import { auth } from './firebase';
 import { getFirestore, collection, doc, updateDoc, getDoc } from 'firebase/firestore';
 
-const Deposit = () => {
+const Withdraw = () => {
     const [show, setShow] = useState(true);
     const [status, setStatus] = useState('');
     const [userData, setUserData] = useState(null);
@@ -37,7 +37,7 @@ const Deposit = () => {
                     console.error('Error fetching balance:', error);
                 });
         }
-    }, []);
+    }, [auth.currentUser]);
 
     const handleDeposit = async (amount) => {
         try {
@@ -159,4 +159,4 @@ const DepositForm = ({ user, handleDeposit, setStatus, setShow, userData, setUse
     );
 };
 
-export default Deposit;
+export default Withdraw;
