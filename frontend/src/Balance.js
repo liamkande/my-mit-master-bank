@@ -1,50 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
-import { auth } from './firebase'; // Import your Firebase authentication
+import { auth } from './firebase';
 
 const Balance = () => {
+    const [userData, setUserData] = useState(null); // Add a state for user data
     const [balance, setBalance] = useState(null);
-    const [currentUserName, setCurrentUserName] = useState('');
-    const loggedInUser = auth.currentUser;
 
-    // Function to fetch and set the current user's display name and balance
     const fetchCurrentUserData = async () => {
-        if (loggedInUser) {
-            const db = getFirestore();
-            const usersCollection = collection(db, 'users');
-            const userDocRef = doc(usersCollection, loggedInUser.uid);
+        try {
+            if (auth.currentUser) {
+                const db = getFirestore();
+                const usersCollection = collection(db, 'users');
+                const userDocRef = doc(usersCollection, auth.currentUser.uid);
 
-            const userDoc = await getDoc(userDocRef);
+                const userDoc = await getDoc(userDocRef);
 
-            if (userDoc.exists()) {
-                const userData = userDoc.data();
-                setCurrentUserName(loggedInUser.displayName);
-                setBalance(userData.balance);
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    setUserData(userData); // Set user data
+                    setBalance(userData.balance); // Set balance
+                }
             }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
         }
     };
+
     const handleSignOut = () => {
         auth.signOut()
             .then(() => {
-                console.log('Sign-out successful.')
+                console.log('Sign-out successful.');
             })
             .catch((error) => {
-                // An error occurred during sign-out.
                 console.error('Error signing out:', error);
             });
     };
+
     useEffect(() => {
         // Fetch the current user's data when the component mounts
         fetchCurrentUserData()
             .then(() => {
-                console.log('Fetched User successful.')
+                console.log('Fetched User successful.');
             })
             .catch((error) => {
-                // An error occurred during sign-out.
                 console.error('Error fetching user:', error);
             });
-    }, [loggedInUser]);
+    }, []);
 
     const handleLogout = () => {
         handleSignOut();
@@ -54,9 +56,9 @@ const Balance = () => {
         <Card bg="info" text="white">
             <Card.Header>
                 Balance
-                {loggedInUser && (
+                {auth.currentUser && (
                     <div>
-                        <h3>Welcome, {currentUserName}</h3>
+                        <h3>Welcome, {userData?.displayName}</h3>
                         <p>Your Current Balance is : ${balance}</p>
                         <button className="btn btn-danger" onClick={handleLogout}>
                             Logout
