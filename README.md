@@ -34,7 +34,7 @@ Before you begin, ensure you have met the following requirements:
 ## Getting Started
 
 1. Clone this repository to your local machine.
-git clone https://github.com/yourusername/my-bank-app.git
+git clone https://github.com/liamkande/my-mit-master-bank
 
 ## Available Scripts
 
