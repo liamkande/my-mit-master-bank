@@ -2,7 +2,7 @@
 FROM node:21
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /usr/index
 
 # Copy package.json and package-lock.json to the container
 COPY package*.json ./
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port that the app will run on
-EXPOSE 28017
+EXPOSE 8080
 
 # Define the command to run your application
 CMD [ "node", "index.js" ]

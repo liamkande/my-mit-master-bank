@@ -1,15 +1,52 @@
-# Getting Started with Create React App
+# My Bank Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This represents the culmination of my academic journey in the prestigious MIT Professional Certificate program in Coding: Full Stack Development – a capstone project that showcases my mastery of cutting-edge technology and programming expertise, solidifying my status as a forward-thinking and accomplished Full Stack Software Engineer.
+
+## Features
+
+- User registration and authentication using Firebase Authentication.
+- Account creation and management.
+- Deposit and withdraw money from user accounts.
+- View account balances.
+- A simple user interface for interacting with the bank.
+- Data persistence using Firebase Firestore.
+
+## Technologies Used
+
+- Firebase: Firebase Authentication for user management and Firebase Firestore for data storage.
+- React: Front-end framework for building the web application.
+- Express (Development): Used for setting up a simple server for development.
+- Jest (Development): Used for testing.
+- JavaScript: Programming language used for the application.
+- dal (Development): Data access layer for interacting with the database.
+- react-router-dom: Used for routing.
+- react-bootstrap: Used for styling. 
+- Docker (Optional): Containerization for easy deployment.
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Node.js and npm installed.
+- Firebase project set up with Authentication and Firestore enabled.
+- Docker (optional, for containerization).
+
+## Getting Started
+
+1. Clone this repository to your local machine.
+git clone https://github.com/yourusername/my-bank-app.git
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm start` for backend
+### `npm client` for frontend
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+make sure to add your firebase serviceAccountKey.json file to the backend folder.
+you can generate your serviceAccountKey.json file from your firebase project settings.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
@@ -17,7 +54,7 @@ You may also see any lint errors in the console.
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
 
 ### `npm run build`
 
@@ -39,32 +76,8 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+### Deployed app Link: 
+https://my-mit-bank-app.web.app/
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Docker image link (Optional): 
+`cd backend && docker build -t my-bank-app . && docker run -p 8080:8080 my-bank-app`
